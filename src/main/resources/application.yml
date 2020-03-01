@@ -1,0 +1,25 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: apiconnector-service
+  data:
+    mongodb:
+      uri : mongodb://admin:admin123@ds149806.mlab.com:49806/opsera-uat
+logging:
+  file: /var/log/opsera/opsera-apiconnector-service/apiconnector-service.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.opsera: DEBUG
+    org.hibernate: ERROR
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/

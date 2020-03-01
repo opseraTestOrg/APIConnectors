@@ -1,0 +1,52 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.5.RELEASE")
+	}
+}
+
+description = projectDesc
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+jar {
+	baseName = projectName
+	version = projectVersion
+}
+
+archivesBaseName = projectName
+version = projectVersion
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-data-rest:2.2.5.RELEASE')
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb:2.2.5.RELEASE')
+	compile('com.atlassian.jira:jira-rest-java-client-core:5.2.0')
+	compile('com.atlassian.jira:jira-rest-java-client-api:5.2.0')
+	compile('org.apache.httpcomponents:httpcore-nio:4.4.13')
+	compile('com.offbytwo.jenkins:jenkins-client:0.3.8')
+	compile('org.modelmapper:modelmapper:2.3.6')
+	compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.1.RELEASE')
+	
+	compile('io.springfox:springfox-swagger-ui:2.9.2')
+	compile('io.springfox:springfox-swagger2:2.9.2')
+	
+	compileOnly('io.atlassian.fugue:fugue:4.7.2')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.boot:spring-boot-starter-test:2.2.5.RELEASE')
+}
