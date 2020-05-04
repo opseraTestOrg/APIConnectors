@@ -41,7 +41,6 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-data-rest:2.2.5.RELEASE')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb:2.2.5.RELEASE')
 	compile('com.atlassian.jira:jira-rest-java-client-core:5.2.0')
 	compile('com.atlassian.jira:jira-rest-java-client-api:5.2.0')
