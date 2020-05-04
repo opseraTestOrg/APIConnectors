@@ -1,25 +1,67 @@
+logging:
+   file: apiConnectors
+   path: /apps/OpsERA/logs/components/api-connectors
 server:
   port: 9090
 spring:
   application:
     name: apiconnector-service
-  data:
+    description: API for interaction apiconnector jira & gitlab
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+scheduled: 
+   time: 1800000
+
+---
+
+spring:
+   profiles: dev
+   data:
     mongodb:
-      uri : mongodb://admin:admin123@ds149806.mlab.com:49806/opsera-uat
-logging:
-  file: /var/log/opsera/opsera-apiconnector-service/apiconnector-service.log
-  pattern:
-    console: "%d %-5level %logger : %msg%n"
-    file: "%d %-5level [%thread] %logger : %msg%n"
-  level:
-    org.springframework.web: ERROR
-    com.opsera: DEBUG
-    org.hibernate: ERROR
-    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+      uri: mongodb://sa:tN%3Atb0rbP3@ec2-18-189-182-79.us-east-2.compute.amazonaws.com:27017/opseradb
+rabbitmq:
+   baseurl: http://microservices-dev.opsera.io:9091/api/rabbitmq/
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
   client:
     serviceUrl:
-      defaultZone: http://127.0.0.1:8761/eureka/
+      defaultZone: http://microservices-dev.opsera.io:8761/eureka/
+             
+---
+
+spring:
+   profiles: test
+   data:
+    mongodb:
+      uri: mongodb://opsera_app:Opsera_app_Z%21x%253@10.0.3.143:27017/opsera
+rabbitmq:
+   baseurl: http://10.0.3.253:9091/api/rabbitmq/
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://10.0.3.253:8761/eureka/
+
+         
+---
+
+spring:
+   profiles: prod
+   data:
+    mongodb:
+     uri: mongodb://opsera_app:Opsera_app_Z%21x%253@10.0.2.79:27017/opsera
+rabbitmq:
+   baseurl: http://10.0.2.4:9091/api/rabbitmq/
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://10.0.2.4:8761/eureka/  

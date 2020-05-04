@@ -8,28 +8,62 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.opsera.apiconnector.service.ApiConnectorService;
-import com.opsera.models.ApiConnectorDetail;
+import com.opsera.apiconnector.config.IServiceFactory;
+import com.opsera.apiconnector.resources.ConnectorDetails;
+import com.opsera.apiconnector.resources.JiraConectorDTO;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
+@Api("API interating to api connector with jira")
 public class ApiConnectorController {
 
-	@Autowired
-	ApiConnectorService apiConnectorService;
+    @Autowired
+    IServiceFactory serviceFactory;
 
-	@GetMapping("/status")
-	public ResponseEntity<String> status() {
-		return new ResponseEntity<>("Api Connector Service running....", HttpStatus.OK);
-	}
+    /**
+     * To check the status of the Apiconnector service
+     * 
+     * @return
+     */
+    @GetMapping("/status")
+    @ApiOperation("To check the service running....")
+    public ResponseEntity<String> status() {
+        log.debug("Api Connector Service running....");
+        return new ResponseEntity<>("Api Connector Service running....", HttpStatus.OK);
+    }
 
-	@PostMapping(value = "/saveJiraDetails")
-	public void saveJiraDetails(@RequestBody JiraConectorDTO jiraConectorDTO) {
-		apiConnectorService.saveJiraDetails(jiraConectorDTO);
-	}
+    /**
+     * TO store jira details in db
+     * 
+     * @param jiraConectorDTO
+     */
+    @PostMapping(value = "/saveJiraDetails")
+    @ApiOperation("Api for save the jira details in db")
+    public void saveJiraDetails(@RequestBody JiraConectorDTO jiraConectorDTO) {
+        Long startTime = System.currentTimeMillis();
+        log.info("Starting to save jira details and time execute by {} ", startTime);
+        serviceFactory.getApiConnectorService().saveJiraDetails(jiraConectorDTO);
+        log.info("Successfully to save jira details  and time taken by {} ", System.currentTimeMillis() - startTime);
 
-	@PostMapping(value = "/raiseJiraTicket")
-	public Object raiseJiraTicket(@RequestBody ApiConnectorDetail apiConnectorDetail) {
-		apiConnectorService.raiseJiraTicket(apiConnectorDetail);
-		return apiConnectorDetail;
-	}
+    }
+
+    /**
+     * To raise the jira ticket when build failed
+     * 
+     * @param apiConnectorDetail
+     * @return
+     */
+    @ApiOperation("Api for raise the jira in build failed")
+    @PostMapping(value = "/raiseJiraTicket")
+    public Object raiseJiraTicket(@RequestBody ConnectorDetails apiConnectorDetail) {
+        Long startTime = System.currentTimeMillis();
+        log.info("Starting to raise the jira ticket and time execute by {} ", startTime);
+        serviceFactory.getApiConnectorService().raiseJiraTicket(apiConnectorDetail);
+        log.info("Successfully raised the jira ticket and time taken by {} ", System.currentTimeMillis() - startTime);
+        return apiConnectorDetail;
+    }
 }
