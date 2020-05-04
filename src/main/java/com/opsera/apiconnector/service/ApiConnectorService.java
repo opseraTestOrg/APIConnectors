@@ -44,10 +44,10 @@ public class ApiConnectorService {
     private static Logger logger = LogManager.getLogger(ApiConnectorService.class);
 
     @Autowired
-    ApiConnectorDetailsRepository apiConnectorDetailsRepository;
+    private ApiConnectorDetailsRepository apiConnectorDetailsRepository;
 
     @Autowired
-    IServiceFactory serviceFactory;
+    private IServiceFactory serviceFactory;
 
     /**
      * To store the jira details to db

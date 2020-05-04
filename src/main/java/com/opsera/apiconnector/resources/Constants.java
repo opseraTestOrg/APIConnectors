@@ -10,7 +10,7 @@ package com.opsera.apiconnector.resources;
 public class Constants {
 
     private Constants() {
-
+        // do nothing
     }
 
     public static final String RAISE_JIRA_TICKET_PATH = "customerRequestHandler/raiseJiraTicket";

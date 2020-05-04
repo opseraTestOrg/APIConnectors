@@ -16,9 +16,9 @@ import com.opsera.apiconnector.resources.ConnectorDetails;
 @Component
 public class ApiConnectorSchedular {
 
-    IServiceFactory serviceFactory;
+    private IServiceFactory serviceFactory;
 
-    AppConfig appConfig;
+    private AppConfig appConfig;
 
     @Autowired
     public ApiConnectorSchedular(IServiceFactory serviceFactory, AppConfig appConfig) {
@@ -27,6 +27,11 @@ public class ApiConnectorSchedular {
         this.appConfig = appConfig;
     }
 
+    /**
+     * email scheduler 
+     * 
+     * 
+     */
     @Scheduled(fixedRateString = "${scheduled.time}")
     public void emailSchedular() {
         List<ConnectorDetails> connectorDetails = serviceFactory.getApiConnectorService().findAll();

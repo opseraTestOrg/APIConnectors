@@ -6,7 +6,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class JobDetails {
+
     private String jobName;
+
     private Long lastFailedBuildTime;
 
 }

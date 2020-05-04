@@ -12,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApiConnectorDetails extends ConnectorDetails {
+
     @Id
     private String id;
 

@@ -24,13 +24,10 @@ spring:
 rabbitmq:
    baseurl: http://microservices-dev.opsera.io:9091/api/rabbitmq/
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
   client:
     serviceUrl:
       defaultZone: http://microservices-dev.opsera.io:8761/eureka/
-             
+
 ---
 
 spring:
@@ -41,14 +38,10 @@ spring:
 rabbitmq:
    baseurl: http://10.0.3.253:9091/api/rabbitmq/
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
   client:
     serviceUrl:
       defaultZone: http://10.0.3.253:8761/eureka/
 
-         
 ---
 
 spring:
@@ -59,9 +52,6 @@ spring:
 rabbitmq:
    baseurl: http://10.0.2.4:9091/api/rabbitmq/
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
   client:
     serviceUrl:
-      defaultZone: http://10.0.2.4:8761/eureka/  
+      defaultZone: http://10.0.2.4:8761/eureka/

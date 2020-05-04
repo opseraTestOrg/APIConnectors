@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiConnectorController {
 
     @Autowired
-    IServiceFactory serviceFactory;
+    private IServiceFactory serviceFactory;
 
     /**
      * To check the status of the Apiconnector service

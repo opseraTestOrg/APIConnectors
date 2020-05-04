@@ -14,8 +14,8 @@ public interface IServiceFactory {
 
     public Gson gson();
 
-    ApiConnectorsUtils getApiConnectorsUtils();
+    public ApiConnectorsUtils getApiConnectorsUtils();
 
-    ApiConnectorService getApiConnectorService();
+    public ApiConnectorService getApiConnectorService();
 
 }
