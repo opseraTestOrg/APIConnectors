@@ -1,0 +1,6 @@
+#build dev image
+
+docker build -t opsera-api-connectors .
+docker run -p 9090:9090 --name api-connectors --env DOCKER_ENV=dev -v /apps/OpsERA/logs/components/api-connectors:/apps/OpsERA/logs/components/api-connectors -d opsera-api-connectors
+docker stop api-connectors
+docker rm api-connectors

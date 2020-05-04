@@ -1,0 +1,63 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+    	}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.5.RELEASE")
+		classpath('org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8.0.1969')
+		classpath('org.springframework.boot:spring-boot-gradle-plugin:2.2.5.RELEASE')
+	}
+}
+
+description = projectDesc
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
+
+jar {
+	baseName = projectName
+	version = projectVersion
+}
+
+archivesBaseName = projectName
+version = projectVersion
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-data-rest:2.2.5.RELEASE')
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb:2.2.5.RELEASE')
+	compile('com.atlassian.jira:jira-rest-java-client-core:5.2.0')
+	compile('com.atlassian.jira:jira-rest-java-client-api:5.2.0')
+	compile('org.apache.httpcomponents:httpcore-nio:4.4.13')
+	compile('com.offbytwo.jenkins:jenkins-client:0.3.8')
+	compile('org.modelmapper:modelmapper:2.3.6')
+	compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.1.RELEASE')
+	compile('com.fasterxml.jackson.core:jackson-core:2.10.2')
+	compile('com.fasterxml.jackson.core:jackson-annotations:2.10.2')
+	compile('io.springfox:springfox-swagger-ui:2.9.2')
+	compile('io.springfox:springfox-swagger2:2.9.2')
+	
+	compileOnly('io.atlassian.fugue:fugue:4.7.2')
+
+	compile('com.google.code.gson:gson:2.8.6')
+	compileOnly 'org.projectlombok:lombok:1.18.4'
+	annotationProcessor ('org.projectlombok:lombok')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
