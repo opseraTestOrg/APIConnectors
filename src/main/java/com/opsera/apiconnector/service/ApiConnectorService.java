@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -32,6 +31,7 @@ import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 import com.opsera.apiconnector.config.IServiceFactory;
+import com.opsera.apiconnector.exception.ResourcesNotAvailable;
 import com.opsera.apiconnector.repository.ApiConnectorDetails;
 import com.opsera.apiconnector.repository.ApiConnectorDetailsRepository;
 import com.opsera.apiconnector.repository.JobDetails;
@@ -53,9 +53,10 @@ public class ApiConnectorService {
      * To store the jira details to db
      * 
      * @param jiraConectorDTO
+     * @throws ResourcesNotAvailable
      */
     @Transactional
-    public void saveJiraDetails(JiraConectorDTO jiraConectorDTO) {
+    public void saveJiraDetails(JiraConectorDTO jiraConectorDTO) throws ResourcesNotAvailable {
         apiConnectorDetailsRepository.save(convertApiConnectorDetails(jiraConectorDTO));
     }
 
@@ -63,8 +64,9 @@ public class ApiConnectorService {
      * Raise the jira ticket when build failed
      * 
      * @param apiConnectorDetail
+     * @throws ResourcesNotAvailable
      */
-    public void raiseJiraTicket(ConnectorDetails connectorDetails) {
+    public void raiseJiraTicket(ConnectorDetails connectorDetails) throws ResourcesNotAvailable {
         try {
             Map<String, String[]> buildFailureMap = getJenkinDetails(connectorDetails);
             if (!CollectionUtils.isEmpty(buildFailureMap)) {
@@ -91,8 +93,9 @@ public class ApiConnectorService {
      * 
      * @param jiraConectorDTO
      * @return
+     * @throws ResourcesNotAvailable
      */
-    private ApiConnectorDetails convertApiConnectorDetails(JiraConectorDTO jiraConectorDTO) {
+    private ApiConnectorDetails convertApiConnectorDetails(JiraConectorDTO jiraConectorDTO) throws ResourcesNotAvailable {
         String jenkinEncryptPassword = serviceFactory.getApiConnectorsUtils().encodeString(jiraConectorDTO.getJenkinPassword());
         String jiraEncryptPassword = serviceFactory.getApiConnectorsUtils().encodeString(jiraConectorDTO.getJiraPassword());
         ApiConnectorDetails apiConnectorDetails = new ApiConnectorDetails();
@@ -165,8 +168,9 @@ public class ApiConnectorService {
      * 
      * @param apiConnectorDetail
      * @return
+     * @throws ResourcesNotAvailable
      */
-    private Map<String, String[]> getJenkinDetails(ConnectorDetails connectorDetails) {
+    private Map<String, String[]> getJenkinDetails(ConnectorDetails connectorDetails) throws ResourcesNotAvailable {
         Map<String, String[]> buildFailureMap = new HashMap<>();
         try {
             String jenkinDecriptPassword = serviceFactory.getApiConnectorsUtils().decodeString(connectorDetails.getJenkinPassword());
@@ -193,7 +197,7 @@ public class ApiConnectorService {
             }
             return buildFailureMap;
         } catch (IOException | URISyntaxException e) {
-            throw new ResourceNotFoundException(JENKINS_JIRA_NOT_RUNNING + e.getMessage());
+            throw new ResourcesNotAvailable(JENKINS_JIRA_NOT_RUNNING + e.getMessage());
         }
     }
 
@@ -202,10 +206,11 @@ public class ApiConnectorService {
      * 
      * @param apiConnectorDetails
      * @return
+     * @throws ResourcesNotAvailable
      * @throws URISyntaxException
      * @throws IOException
      */
-    private ApiConnectorDetails getJenkinDetails(ApiConnectorDetails apiConnectorDetails) {
+    private ApiConnectorDetails getJenkinDetails(ApiConnectorDetails apiConnectorDetails) throws ResourcesNotAvailable {
         try {
             String jenkinDecriptPassword = serviceFactory.getApiConnectorsUtils().decodeString(apiConnectorDetails.getJenkinPassword());
             JenkinsServer jenkins = serviceFactory.getApiConnectorsUtils().getJenkinsServer(apiConnectorDetails.getJenkinUrl(), apiConnectorDetails.getJenkinUserName(), jenkinDecriptPassword);
@@ -231,7 +236,7 @@ public class ApiConnectorService {
             }
             return apiConnectorDetails;
         } catch (IOException | URISyntaxException e) {
-            throw new ResourceNotFoundException(JENKINS_JIRA_NOT_RUNNING + e.getMessage());
+            throw new ResourcesNotAvailable(JENKINS_JIRA_NOT_RUNNING + e.getMessage());
         }
 
     }
@@ -242,8 +247,9 @@ public class ApiConnectorService {
      * @param apiConnectorDetail
      * @param buildFailureMap
      * @throws URISyntaxException
+     * @throws ResourcesNotAvailable
      */
-    private void createIssueClient(ConnectorDetails connectorDetails, Map<String, String[]> buildFailureMap) throws URISyntaxException {
+    private void createIssueClient(ConnectorDetails connectorDetails, Map<String, String[]> buildFailureMap) throws URISyntaxException, ResourcesNotAvailable {
         try {
             String jiraDecriptPassword = serviceFactory.getApiConnectorsUtils().decodeString(connectorDetails.getJiraPassword());
             JiraRestClient restClient = serviceFactory.getApiConnectorsUtils().getJiraRestClient(connectorDetails.getJiraUrl(), connectorDetails.getJiraUserName(), jiraDecriptPassword);
@@ -267,7 +273,7 @@ public class ApiConnectorService {
                 }
             }
         } catch (URISyntaxException e) {
-            throw new ResourceNotFoundException(JENKINS_JIRA_NOT_RUNNING + e.getMessage());
+            throw new ResourcesNotAvailable(JENKINS_JIRA_NOT_RUNNING + e.getMessage());
         }
     }
 

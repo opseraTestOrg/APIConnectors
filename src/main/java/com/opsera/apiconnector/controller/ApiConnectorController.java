@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opsera.apiconnector.config.IServiceFactory;
+import com.opsera.apiconnector.exception.ResourcesNotAvailable;
 import com.opsera.apiconnector.resources.ConnectorDetails;
 import com.opsera.apiconnector.resources.JiraConectorDTO;
 
@@ -40,10 +41,11 @@ public class ApiConnectorController {
      * TO store jira details in db
      * 
      * @param jiraConectorDTO
+     * @throws ResourcesNotAvailable
      */
     @PostMapping(value = "/saveJiraDetails")
     @ApiOperation("Api for save the jira details in db")
-    public void saveJiraDetails(@RequestBody JiraConectorDTO jiraConectorDTO) {
+    public void saveJiraDetails(@RequestBody JiraConectorDTO jiraConectorDTO) throws ResourcesNotAvailable {
         Long startTime = System.currentTimeMillis();
         log.info("Starting to save jira details and time execute by {} ", startTime);
         serviceFactory.getApiConnectorService().saveJiraDetails(jiraConectorDTO);
@@ -56,10 +58,11 @@ public class ApiConnectorController {
      * 
      * @param apiConnectorDetail
      * @return
+     * @throws ResourcesNotAvailable
      */
     @ApiOperation("Api for raise the jira in build failed")
     @PostMapping(value = "/raiseJiraTicket")
-    public Object raiseJiraTicket(@RequestBody ConnectorDetails apiConnectorDetail) {
+    public Object raiseJiraTicket(@RequestBody ConnectorDetails apiConnectorDetail) throws ResourcesNotAvailable {
         Long startTime = System.currentTimeMillis();
         log.info("Starting to raise the jira ticket and time execute by {} ", startTime);
         serviceFactory.getApiConnectorService().raiseJiraTicket(apiConnectorDetail);
