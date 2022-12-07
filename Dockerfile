@@ -1,5 +1,7 @@
 FROM gradle:6.3.0-jdk8 AS build
 ENV DOCKER_ENV=dev
+ARG jfrog_password_arg
+ENV jfrog_password=$jfrog_password_arg
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle clean build --no-daemon
